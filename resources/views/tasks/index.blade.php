@@ -13,7 +13,7 @@
                 @foreach($tasks as $task)
                     <li class="list-group-item">
                         {{ $task->title }}
-                        <a href="{{ route('tasks.show', $task) }}" class="btn btn-info btn-sm float-end">View</a>
+                        <a href="{{ route('tasks.index', $task) }}" class="btn btn-info btn-sm float-end">View</a>
                     </li>
                 @endforeach
             </ul>

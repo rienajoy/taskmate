@@ -11,16 +11,13 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
-        'scheduled_at',
+        'scheduled',
         'is_recurring',
-        'category',
-        'completed',
-        'notes',
+        'category'
     ];
 
-    protected $casts = [
-        'scheduled_at' => 'datetime',
-        'is_recurring' => 'boolean',
-        'completed' => 'boolean',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

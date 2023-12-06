@@ -4,105 +4,60 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
     public function index()
-    {
-        $tasks = Task::all();
-        return view('dashboard', compact('tasks'));
-    }
-    
-
-    
-
-    public function create()
-    {
-        return view('tasks.create');
-    }
-
-
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'description' => 'required|max:1000',
-            'schedule_at' => 'nullable|date',
-            'recurring' => 'boolean',
-            'category' => 'in:Personal,Work',
-            'reminder' => 'nullable|date', // Add the new field
-        ]);
-    
-        // Store reminder date and time
-        $validatedData['reminder_at'] = $request->input('reminder');
-    
-        Task::create($validatedData);
-    
-        return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
-    }
-    
-    public function searchTasks(Request $request)
-    {
-        $keywords = $request->input('keywords');
-        $category = $request->input('category');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-    
-        $filteredTasks = Task::query()
-            ->when($keywords, function ($query) use ($keywords) {
-                $query->where('title', 'like', "%$keywords%")
-                    ->orWhere('description', 'like', "%$keywords%");
-            })
-            ->when($category, function ($query) use ($category) {
-                $query->where('category', $category);
-            })
-            ->when($startDate, function ($query) use ($startDate) {
-                $query->whereDate('schedule', '>=', $startDate);
-            })
-            ->when($endDate, function ($query) use ($endDate) {
-                $query->whereDate('schedule', '<=', $endDate);
-            })
-            ->get();
-    
-            return view('dashboard', compact('filteredTasks'));
-    }
-    public function showDashboard()
 {
-    // Your existing code to retrieve all tasks
-    $tasks = Task::all(); // Or any method to fetch tasks from your database
+    
+    $tasks = Task::where('user_id', auth()->user()->id)->get();
 
-    // Assuming you want to show all tasks initially when the dashboard loads
     return view('dashboard', compact('tasks'));
 }
+    
 
 
+public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'title' => 'required|max:100',
+        'description' => 'required|max:1000',
+        'scheduled' => 'nullable|date_format:Y-m-d\TH:i', // Adjust format based on your form
+        'is_recurring' => 'boolean',
+        'category' => 'in:Personal,Work',
+    ]);
 
+    $task = new Task();
+    $task->title = $validatedData['title'];
+    $task->description = $validatedData['description'];
 
+    // Convert the scheduled date to the desired format if provided
+    if ($validatedData['scheduled']) {
+        // Create a DateTime object from the provided schedule
+        $scheduledDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $validatedData['scheduled']);
 
-    public function show(Task $task)
-    {
-        return view('tasks.show', compact('task'));
+        // Ensure the format is suitable for storage in the database (Y-m-d H:i:s)
+        $formattedScheduled = $scheduledDateTime->format('Y-m-d H:i:s');
+
+        // Assign the formatted date to the task's scheduled attribute
+        $task->scheduled = $formattedScheduled;
     }
 
-    public function edit(Task $task)
-    {
-        return view('tasks.edit', compact('task'));
+    $task->is_recurring = $validatedData['is_recurring'] ?? false;
+    $task->category = $validatedData['category'];
+    $task->user_id = auth()->user()->id;
+
+    try {
+        $task->save();
+    } catch (\Exception $e) {
+        // Handle the exception (e.g., log, show error message, etc.)
+        return redirect()->route('tasks.index')->with('error', 'Error saving task: ' . $e->getMessage());
     }
 
-    public function update(Request $request, Task $task)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|max:100',
-            'description' => 'nullable|max:1000',
-            'scheduled_at' => 'required|date',
-            'is_recurring' => 'boolean',
-            'category' => 'required|in:Personal,Work',
-        ]);
+    return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
+}
 
-        $task->update($validatedData);
-
-        return redirect()->route('tasks.index');
-    }
 
     public function destroy(Task $task)
     {
@@ -110,27 +65,92 @@ class TaskController extends Controller
     
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
+
+
     
     public function addNote(Request $request, $taskId) {
         $task = Task::findOrFail($taskId);
     
-        // Validate the note input
+        
         $validatedData = $request->validate([
-            'note' => 'required|max:500', // Validate the 'note' field
+            'note' => 'required|max:500', 
         ]);
     
-        // Retrieve existing notes and append the new note to them
+       
         $notes = $task->notes ?? '';
         $newNote = $validatedData['note'];
         $notes .= ($notes !== '' ? "\n" : '') . $newNote;
     
-        // Update the task's notes column with the new note
+        
         $task->notes = $notes;
         $task->save();
     
-        // Redirect or return a response as needed
         return redirect()->back()->with('success', 'Note added successfully');
     }
     
+    public function editNoteForm(Task $task)
+    {
+        
+        $task->load('notes');
+
+       
+        return view('edit_note_form', compact('task'));
+    }
+
+    public function updateNote(Request $request, Task $task)
+    {
+        $validatedData = $request->validate([
+            'note' => 'required|max:500',
+        ]);
+
+        
+        $task->notes = $validatedData['note'];
+        $task->save();
+
+        return redirect()->route('tasks.index')->with('success', 'Note updated successfully.');
+    }
+
+
+    public function deleteNote(Task $task)
+    {
+        
+        $task->notes = null;
+        $task->save();
+
+        return redirect()->route('tasks.index')->with('success', 'Note deleted successfully.');
+    }
     
+
+    
+
+public function deleteCompleted(Request $request, $taskId)
+{
+    $task = Task::find($taskId);
+
+    if ($task && $task->completed) {
+        $task->delete();
+        // Optionally, return a response or redirect
+    }
+
+    // Handle if the task doesn't exist or is not completed
+}
+
+public function markTaskAsCompleted(Request $request, $taskId)
+{
+    // Find the task by ID
+    $task = Task::find($taskId);
+
+    if ($task) {
+        // Update task completion status
+        $task->completed = true;
+        $task->save();
+        
+        // Redirect or return the updated task list view
+        return redirect()->route('tasks.index')->with('success', 'Task marked as completed.');
+    } else {
+        // Task not found, handle the error (e.g., redirect with error message)
+        return redirect()->route('tasks.index')->with('error', 'Task not found.');
+    }
+}
+
 }
