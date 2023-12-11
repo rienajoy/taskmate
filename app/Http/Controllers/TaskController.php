@@ -4,6 +4,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Notifications\TaskApproachingNotification;
+use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 
 class TaskController extends Controller
@@ -88,13 +90,13 @@ public function store(Request $request)
         return redirect()->back()->with('success', 'Note added successfully');
     }
     
-    public function editNoteForm(Task $task)
+    public function edit($taskId)
     {
-        
-        $task->load('notes');
+        // Fetch the task based on the provided ID
+        $task = Task::findOrFail($taskId);
 
-       
-        return view('edit_note_form', compact('task'));
+        // Pass the task data to the view for editing the note
+        return view('tasks.editNote', compact('task'));
     }
 
     public function updateNote(Request $request, Task $task)
@@ -123,34 +125,71 @@ public function store(Request $request)
 
     
 
-public function deleteCompleted(Request $request, $taskId)
-{
-    $task = Task::find($taskId);
+    public function deleteCompleted(Request $request, $taskId)
+    {
+        $task = Task::find($taskId);
 
-    if ($task && $task->completed) {
-        $task->delete();
-        // Optionally, return a response or redirect
+        if ($task && $task->completed) {
+            $task->delete();
+            // Optionally, return a response or redirect
+        }
+
+        // Handle if the task doesn't exist or is not completed
     }
 
-    // Handle if the task doesn't exist or is not completed
-}
+    public function markTaskAsCompleted(Request $request, $taskId)
+    {
+        // Find the task by ID
+        $task = Task::find($taskId);
 
-public function markTaskAsCompleted(Request $request, $taskId)
-{
-    // Find the task by ID
-    $task = Task::find($taskId);
+        if ($task) {
+            // Update task completion status
+            $task->completed = true;
+            $task->save();
+            
+            // Redirect or return the updated task list view
+            return redirect()->route('tasks.index')->with('success', 'Task marked as completed.');
+        } else {
+            // Task not found, handle the error (e.g., redirect with error message)
+            return redirect()->route('tasks.index')->with('error', 'Task not found.');
+        }
+    }
 
-    if ($task) {
-        // Update task completion status
-        $task->completed = true;
-        $task->save();
-        
-        // Redirect or return the updated task list view
-        return redirect()->route('tasks.index')->with('success', 'Task marked as completed.');
-    } else {
-        // Task not found, handle the error (e.g., redirect with error message)
-        return redirect()->route('tasks.index')->with('error', 'Task not found.');
+
+
+
+    public function searchResults(Request $request)
+    {
+        $query = $request->input('query');
+    
+        $tasks = Task::where('user_id', auth()->user()->id) // Assuming the user_id column relates to the user's ID in the tasks table
+            ->where(function ($queryBuilder) use ($query) {
+                $queryBuilder->where('title', 'like', "%$query%")
+                    ->orWhere('category', 'like', "%$query%")
+                    ->orWhere('scheduled', 'like', "%$query%");
+            })
+            ->get();
+    
+        return view('search_results', compact('tasks'));
+    }
+
+
+    public function createTask(Request $request)
+    {
+        // Logic to create the task
+        $taskDetails = $request->input('task_details');
+        $userEmail = $request->input('user_email');
+
+        // Schedule the notification to be sent 5 minutes before the task time
+        $scheduledTime = now()->addMinutes(5);
+
+        Notification::route('mail', $userEmail)
+            ->notify((new TaskApproachingNotification($taskDetails))->delay($scheduledTime));
+
+        // Rest of your code to create the task...
     }
 }
 
-}
+
+
+    

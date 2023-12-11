@@ -4,15 +4,26 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Task;
+use App\Notifications\TaskApproachingNotification;
+
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     */
-    protected function schedule(Schedule $schedule): void
+    
+
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $tasksApproaching = Task::where('scheduled', '<=', now()->addMinutes(5))
+                                    ->where('notified', false) // Flag to avoid duplicate notifications
+                                    ->get();
+
+            foreach ($tasksApproaching as $task) {
+                $task->user->notify(new TaskApproachingNotification($task));
+                $task->update(['notified' => true]); // Update flag to avoid duplicate notifications
+            }
+        })->everyMinute(); // Adjust frequency as needed
     }
 
     /**

@@ -32,10 +32,12 @@
                 </header>
             @endif
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+          
+
+            <div class="container">
+        @yield('content')
+    </div>
+
         </div>
 
         @stack('modals')

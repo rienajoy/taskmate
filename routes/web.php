@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FeedbackController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,16 +46,35 @@ Route::put('/tasks/{taskId}/complete', [TaskController::class, 'markTaskAsComple
 Route::delete('/tasks/delete-completed/{taskId}', [TaskController::class, 'deleteCompleted'])->name('tasks.deleteCompleted');
 
 
-Route::get('/tasks/search', [TaskController::class, 'searchTasks'])->name('tasks.search');
-Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
-
-
 
 Route::post('/tasks/addNote/{taskId}', [TaskController::class, 'addNote'])->name('tasks.addNote');
-Route::get('/tasks/{task}/editNoteForm', [TaskController::class, 'editNoteForm'])->name('tasks.editNoteForm');
+Route::get('tasks/{taskId}/editNote', [TaskController::class, 'edit'])->name('tasks.editNote');
 Route::patch('/tasks/{task}/updateNote', [TaskController::class, 'updateNote'])->name('tasks.updateNote');
 Route::delete('/tasks/{task}/deleteNote', [TaskController::class, 'deleteNote'])->name('tasks.deleteNote');
 
 
 
+Route::post('/register', [UserController::class, 'register'])->name('register');
 
+
+
+
+
+
+// Define a route to display the feedback modal
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+
+
+
+
+Route::get('/feedback', function () {return view('feedback');})->name('feedback.form');
+Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedback.store');
+
+
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
+
+
+
+Route::get('/search-results', [TaskController::class, 'searchResults'])->name('search_results');

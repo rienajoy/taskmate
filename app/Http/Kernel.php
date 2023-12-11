@@ -65,17 +65,4 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
-
-// In Kernel.php
-protected function schedule(Schedule $schedule)
-{
-    $schedule->call(function () {
-        $dueReminders = Task::where('reminder_at', '<=', now())->get();
-
-        foreach ($dueReminders as $task) {
-            // Send reminder (use Laravel notifications, emails, etc.)
-            $task->user->notify(new TaskReminder($task));
-        }
-    })->everyMinute(); // Adjust the frequency
-}
-}
+};

@@ -1,4 +1,9 @@
 <x-app-layout>
+
+
+
+@section('content')
+
     <!-- Font Awesome CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
@@ -53,10 +58,75 @@
             border-style: solid black;
            
         }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* To space out elements */
+        }
+
+
+        .dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    display: none;
+}
+
+.dropdown-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+}
+
+        .input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-with-icon input[type="text"] {
+    padding-right: 30px; /* Adjust as needed */
+    /* Other input styles */
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 8px; /* Adjust as needed */
+    cursor: pointer;
+}
+
 </style>
-    
 
 
+          
+                
+                
+<form action="{{ route('search_results') }}" method="GET">
+    <input type="text" name="query" placeholder="Search by title, category, or date">
+    <button type="submit">Search</button>
+</form>
+
+
+<br>
+<br>
 
  <div class="flex flex-col lg:flex-row p-6">
         <!-- First Column: Create Task Interface -->
@@ -64,56 +134,72 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <h3 class="text-lg font-semibold mb-4">Create Task</h3>
                
+
+                <div class="mb-4 px-20">
                 <!-- Create Task Form -->
-                <form action="{{ route('tasks.store') }}" method="POST" class="mb-4">
+                <form action="{{ route('tasks.store') }}" method="POST">
                     @csrf
                     <!-- Task Title -->
-                    <label for="title">Title:</label>
+                   
+                    <label for="title" class="mb-4">Title:</label>
                     <input type="text" name="title" class="border-gray-300 border rounded-md p-2 mr-2" placeholder="Enter Task Title" required maxlength="100">
+                   
 
+                    
                     <!-- Task Description -->
-                    <label for="description">Description:</label>
+                    <label for="description" class="mb-4">Description:</label>
                     <textarea name="description" class="border-gray-300 border rounded-md p-2 mr-2" placeholder="Enter Task Description" required maxlength="1000"></textarea>
-
-                    <div class="flex lg:flex-row flex-col">
+                  
+                    
                         <!-- Task Schedule -->
-                        <div class="mt-4 mb-4 lg:mr-4">
-                            <label for="schedule">Schedule:</label>
-                            <input type="datetime-local" name="scheduled" id="schedule">
-                        </div>
-                        
-
+                    
+                    <label for="schedule">Schedule:</label>
+                    <input type="datetime-local" class="border-gray-300 border rounded-md p-2 mr-2" name="scheduled" id="schedule">
+    </div>
+                         
+                        <div class="flex lg:flex-row flex-col">
                         <!-- Task Category -->
                         <div class="mb-4">
                             <label for="category">Category:</label>
-                            <select name="category" id="category">
+                            <select class="border-gray-300 border rounded-md p-2 mr-2"name="category" id="category">
                                 <option value="Personal">Personal</option>
                                 <option value="Work">Work</option>
                             </select>
-                        </div>
-                    </div>
+                      
 
-                    <div class="mb-4">
-                        <label for="repeat">Repeat:</label>
-                        <select name="repeat" id="repeat">
-                            <option value="everyday">Everyday</option>
-                            <option value="chooseday">Choose a Day</option>
-                        </select>
-                    </div>
+                            <label for="repeat">Repeat:</label>
+                            <select class="border-gray-300 border rounded-md p-2 mr-2" name="repeat" id="repeat" onchange="toggleSpecificDay(this.value)">
+                                <option value="no_repeat">Do Not Repeat</option>
+                                <option value="everyday">Everyday</option>
+                                <option value="chooseday">Choose a Day</option>
+                            </select>
 
-                       <!-- Specific Day for Recurrence -->
-    <div class="mb-4" id="specificDay" style="display: none;">
-        <label for="specificDate">Choose a Date:</label>
-        <input type="date" name="specificDate" id="specificDate">
-    </div>
-                
+                            <!-- Specific Day for Recurrence -->
+                            <div class="mb-4" id="specificDay" style="display: none;">
+                                <label for="specificDate">Choose a Date:</label>
+                                <input type="date" name="specificDate" id="specificDate">
+                            </div>
+
+                            <script>
+                                function toggleSpecificDay(value) {
+                                    const specificDay = document.getElementById('specificDay');
+                                    if (value === 'chooseday') {
+                                        specificDay.style.display = 'block';
+                                    } else {
+                                        specificDay.style.display = 'none';
+                                    }
+                                }       
+                            </script>
+
+
+
+        <div class="flex lg:flex-row flex-col">
                     <!-- Submit Button -->
                     <button type="submit" class="bg-red-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md">Add Task</button>
                 </form>
 
             </div>
         </div>
-
 
         
 
@@ -123,7 +209,17 @@
         <div class="col">
             <div class="bg-blue shadow-lg sm:rounded-lg p-6">
                 <h3 class="container text-center text-lg font-semibold mb-4">Task List</h3>
-                
+      
+
+
+
+
+
+
+
+
+
+
                 <div class="overflow-auto">
                     <div class="row">
                         @forelse($tasks as $index => $task)
@@ -170,22 +266,24 @@
 
 
                       <div class="note-icons">
-                        <a href="{{ route('tasks.editNoteForm', $task->id) }}">
-                          <i class="fas fa-pencil-alt"></i> Edit
+                        <a href="{{ route('tasks.editNote', $task->id) }}">
+                          <i class="fas fa-pencil-alt"></i>
                         </a>
+                        
 
+                        
                         <form action="{{ route('tasks.deleteNote', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this note?');">
                           @csrf
                           @method('DELETE')
                           <button type="submit" class="delete-note-button">
-                            <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i> Delete
+                            <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
                           </button>
                         </form>
                       </div>
                     </div>
                   @endif
 
-                  <button class="add-note-button bg-red-500 text-white font-semibold px-4 py-2 rounded-full">
+                  <button class="ml-4 mb-4 mt-4 add-note-button bg-red-500 text-white font-semibold px-4 py-2 rounded-full">
                     +
                   </button>
 
@@ -226,15 +324,13 @@
 
 
 
-        
-  <div class="col">
+        <div class="col">
     <div class="bg-red overflow-hidden shadow-xl sm:rounded-lg p-6">
         <h3 class="container text-center text-lg font-semibold mb-4">Completed Tasks</h3>
 
         <div class="overflow-auto">
             <div class="row">
                 @foreach($tasks as $task)
-                
                     @if($task->completed)
                         <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
                             <div class="card">
@@ -242,13 +338,18 @@
                                     <div class="border rounded-lg p-4 bg-blue-100">
                                         <div class="flex justify-between items-center">
                                             <b><h2 class="card-subtitle mb-2 ml-4 text-body-secondary">{{ $task->title }}</h2></b>
-                                            @csrf
-                      @method('DELETE')
-                      <button type="submit" class="delete-note-button bg-red-500 text-white font-semibold px-2 py-2 rounded-md">Delete</button>
-                    </form>
+
+                                            <!-- Form encapsulating the Delete button -->
+                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <!-- Delete button inside the form -->
+                                                <button type="submit" class="delete-note-button bg-red-500 text-white font-semibold px-2 py-2 rounded-md">Delete</button>
+                                            </form>
+                                            <!-- End of Form -->
                                         </div>
-                                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                     
+                                        <!-- Task details -->
                                         <hr>
                                         <p class="ml-4">Description: {{ $task->description }}</p>
                                         <p class="ml-4">Schedule: {{ $task->schedule }}</p>
@@ -257,8 +358,7 @@
                                         @if($task->notes)
                                             <div class="flex items-center mb-2">
                                                 <div class="mr-4 flex items-center">
-                                                    <p class="mr-2 ml-4">Notes:
-                                                    {{ $task->notes }}</p>
+                                                    <p class="mr-2 ml-4">Notes: {{ $task->notes }}</p>
                                                 </div>
                                             </div>
                                         @endif
@@ -266,21 +366,12 @@
                                 </div>
                             </div>
                         </div>
-                        
                     @endif
                 @endforeach
-               
             </div>
         </div>
     </div>
 </div>
-         
-
-
-   
-
-
-
 
 
 
@@ -318,6 +409,7 @@
 </script>
 
 
+@endsection
 
 </x-app-layout>
 
