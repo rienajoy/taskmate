@@ -90,6 +90,40 @@
      #feedbackButton:active {
     transform: scale(0.95); /* Scale down when button is pressed */
 }
+
+/* Custom CSS to position the close button */
+.modal-header {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.close-circle {
+    border-radius: 50%; /* Makes the button circular */
+    width: 30px; /* Adjust the width */
+    height: 30px; /* Adjust the height */
+    margin:10px;
+}
+
+.close-circle {
+    border-radius: 50%; /* Makes the button circular */
+    width: 30px; /* Adjust the width */
+    height: 30px; /* Adjust the height */
+    padding: 0; /* Remove padding */
+    font-size: 24px; /* Adjust the font size of 'x' */
+}
+
+/* Optional: Custom styling for the close button */
+.close-circle span:hover {
+    color: red; /* Change color on hover */
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+
 </style>
 
 <body>
@@ -98,9 +132,13 @@
     <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="feedbackModalLabel">Feedback Form</h2>
-                </div>
+            <div class="modal-header">
+    <h2 class="modal-title">Feedback Form</h2>
+    <button type="button" class="close close-circle" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
                 <div class="modal-body">
                     <form id="feedbackForm" method="POST" action="{{ route('feedback.store') }}">
                         @csrf 
@@ -118,14 +156,29 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
 <script src="path/to/bootstrap.bundle.min.js"></script>
 <!-- Your custom scripts if needed -->
+<!-- Your HTML code remains the same -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const submitButton = document.getElementById('submitFeedback');
 
         submitButton.addEventListener('click', function() {
             const feedbackText = document.getElementById('feedback').value;
+
+            // Check if the feedback textarea is empty
+            if (feedbackText.trim() === '') {
+                alert('Please provide feedback before submitting.');
+                return; // Stop further execution
+            }
 
             // Send AJAX request to save the feedback
             fetch('{{ route("feedback.store") }}', {
@@ -152,6 +205,12 @@
                 console.error('Error:', error);
                 // Handle error if needed
             });
+        });
+
+        // Close button functionality remains the same
+        const closeButton = document.querySelector('.modal-header .close');
+        closeButton.addEventListener('click', function() {
+            window.location.href = '{{ route("welcome") }}';
         });
     });
 </script>

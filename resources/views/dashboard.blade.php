@@ -1,392 +1,379 @@
 <x-app-layout>
-
-
-
 @section('content')
-
-    <!-- Font Awesome CSS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
-
-<style>  
-    .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
+<html>
         
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%; /* Adjust width as needed */
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        }
+          
+       <head>
         
-        .modal-btn {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        
-        .modal-btn:hover {
-            background-color: #0056b3;
-        }
+              <!-- Font Awesome CSS -->
+              <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+          <link rel="stylesheet" href="css/dashboard.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-        .bg-blue {
-            width: 50%; /* Adjust this value to fit your desired width */
-            height: fit-content; /* Adjust this if you want to set a fixed height */
-            float: left; 
-           
-        }
-
-        .bg-red {
-            width: 50%; /* Adjust this value to fit your desired width */
-            height: fit-content; /* Adjust this if you want to set a fixed height */
-            float: right; 
-            border-style: solid black;
-           
-        }
-
-        .search-form {
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* To space out elements */
-        }
-
-
-        .dropdown-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 0;
-    display: none;
-}
-
-.dropdown-menu li {
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-.dropdown-menu li:hover {
-    background-color: #f5f5f5;
-}
-
-        .input-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.input-with-icon {
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-.input-with-icon input[type="text"] {
-    padding-right: 30px; /* Adjust as needed */
-    /* Other input styles */
-}
-
-.toggle-btn {
-    position: absolute;
-    right: 8px; /* Adjust as needed */
-    cursor: pointer;
-}
-
-</style>
-
+       </head>
+         
+          <body>
+            <div class="container">
+                    <!-- Left column for main content -->
+                    <div class="main-content">
 
           
-                
-                
-<form action="{{ route('search_results') }}" method="GET">
-    <input type="text" name="query" placeholder="Search by title, category, or date">
-    <button type="submit">Search</button>
-</form>
+          <div class="search">
+              <br>
+              <form action="{{ route('search_results') }}" method="GET">
+                  <input type="text" name="query" placeholder="Search by title, category, or date">
+                  <button type="submit">Search</button>
+              </form>
+          </div>
 
-
-<br>
-<br>
-
- <div class="flex flex-col lg:flex-row p-6">
-        <!-- First Column: Create Task Interface -->
-        <div class="lg:w-1/2 mb-4 lg:mb-0 lg:order-1">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <h3 class="text-lg font-semibold mb-4">Create Task</h3>
-               
-
-                <div class="mb-4 px-20">
-                <!-- Create Task Form -->
-                <form action="{{ route('tasks.store') }}" method="POST">
-                    @csrf
-                    <!-- Task Title -->
-                   
-                    <label for="title" class="mb-4">Title:</label>
-                    <input type="text" name="title" class="border-gray-300 border rounded-md p-2 mr-2" placeholder="Enter Task Title" required maxlength="100">
-                   
-
-                    
-                    <!-- Task Description -->
-                    <label for="description" class="mb-4">Description:</label>
-                    <textarea name="description" class="border-gray-300 border rounded-md p-2 mr-2" placeholder="Enter Task Description" required maxlength="1000"></textarea>
-                  
-                    
-                        <!-- Task Schedule -->
-                    
-                    <label for="schedule">Schedule:</label>
-                    <input type="datetime-local" class="border-gray-300 border rounded-md p-2 mr-2" name="scheduled" id="schedule">
-    </div>
-                         
-                        <div class="flex lg:flex-row flex-col">
-                        <!-- Task Category -->
-                        <div class="mb-4">
-                            <label for="category">Category:</label>
-                            <select class="border-gray-300 border rounded-md p-2 mr-2"name="category" id="category">
-                                <option value="Personal">Personal</option>
-                                <option value="Work">Work</option>
-                            </select>
-                      
-
-                            <label for="repeat">Repeat:</label>
-                            <select class="border-gray-300 border rounded-md p-2 mr-2" name="repeat" id="repeat" onchange="toggleSpecificDay(this.value)">
-                                <option value="no_repeat">Do Not Repeat</option>
-                                <option value="everyday">Everyday</option>
-                                <option value="chooseday">Choose a Day</option>
-                            </select>
-
-                            <!-- Specific Day for Recurrence -->
-                            <div class="mb-4" id="specificDay" style="display: none;">
-                                <label for="specificDate">Choose a Date:</label>
-                                <input type="date" name="specificDate" id="specificDate">
-                            </div>
-
-                            <script>
-                                function toggleSpecificDay(value) {
-                                    const specificDay = document.getElementById('specificDay');
-                                    if (value === 'chooseday') {
-                                        specificDay.style.display = 'block';
-                                    } else {
-                                        specificDay.style.display = 'none';
-                                    }
-                                }       
-                            </script>
-
-
-
-        <div class="flex lg:flex-row flex-col">
-                    <!-- Submit Button -->
-                    <button type="submit" class="bg-red-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md">Add Task</button>
-                </form>
-
-            </div>
-        </div>
-
+          <div style="display: flex; justify-content: space-between;">
+              <!-- Button to trigger modal -->
+              <button id="createTaskBtn" class="button-submit">Create Task</button>
+              
+            
+          </div>
+          <hr>
+          
         
+<!-- Button to trigger modal -->
+                                                <!-- The modal -->
+                                                <div id="taskModal" class="modal">
+                                                  <div class="modal-content">
+                                                  <span class="close-modal">&times;</span>
+                                                    <form action="{{ route('tasks.store') }}" method="POST" class="task-form">
+                                                    @csrf <!-- Include CSRF token -->
+                                                    <!-- Task form content -->
+                                                    <h3 class="text-lg font-semibold mb-4">Create Task</h3>
 
-        <div class="container-fluid">
-    <div class="row">
-        <!-- Task List Section -->
-        <div class="col">
-            <div class="bg-blue shadow-lg sm:rounded-lg p-6">
-                <h3 class="container text-center text-lg font-semibold mb-4">Task List</h3>
-      
+                                                    <label for="title" class="block mb-2">Title:</label>
+                                                    <input
+                                                        type="text"
+                                                        name="title"
+                                                        class="border-gray-300 border rounded-md p-2 mb-4 w-full"
+                                                        placeholder="Enter Task Title"
+                                                        required
+                                                        maxlength="100"
+                                                    >
 
+                                                    <h3 style="text-align: center;">Schedule</h3>
+                                                    <hr>
+                                                    <div class="sched">
+                                                    <label for="date">Date:</label>
+<input
+    type="text"
+    id="date-picker"
+    placeholder="Select Date"
+>
 
+<label for="time">Time:</label>
+<input
+    type="text"
+    id="time-picker"
+    placeholder="Select Time (24-hour format)"
+>
+</div>
+                                                    <label for="category" class="block mb-2">Category:</label>
+                                                    <select class="border-gray-500 border rounded-md p-2 mb-4 w-full" name="category" id="category">
+                                                        <option value="Personal">Personal</option>
+                                                        <option value="Work">Work</option>
+                                                    </select>
 
+                                                  
 
+                                                    <div class="mb-4" id="specificDay" style="display: none;">
+                                                        <label for="specificDate" class="block mb-2">Choose a Date:</label>
+                                                        <input type="date" name="specificDate" id="specificDate" class="border-gray-300 border rounded-md p-2 w-full">
+                                                    </div>
 
+                                                    <label for="description" class="block mb-2">Description:</label>
+                                                    <textarea
+                                                        name="description"
+                                                        class="border-gray-300 border rounded-md p-2 mb-4 w-full"
+                                                        placeholder="Enter Task Description"
+                                                        required
+                                                        maxlength="1000"
+                                                    ></textarea>
 
+                                                    <div class="center-button">
+                                                    <button type="submit" class="button-submit">Add Task</button>
+                                                  </div>
 
+                                                  </form>
 
-
-
-                <div class="overflow-auto">
-                    <div class="row">
-                        @forelse($tasks as $index => $task)
-                            @if(!$task->completed) <!-- Checking if task is not completed -->
-                                @if($index % 3 === 0)
-                                    <div class="row">
-                                @endif
-
-                                <form action="{{ route('tasks.complete', ['taskId' => $task->id]) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>Completed
-                                </form>
-
-                                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                                    <div class="card">
-              <div class="card-body">
-                <div class="border rounded-lg p-4 bg-blue-100">
-                  <div class="flex justify-between items-center">
-                    <b><h2 class="card-subtitle mb-2 ml-4 text-body-secondary">{{ $task->title }}</h2></b>
-      
-                  
-
-
-                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="delete-note-button bg-red-500 text-white font-semibold px-2 py-2 rounded-md">Delete</button>
-                    </form>
-                  </div>
-
-                  <hr>
-                  <p class="ml-4">Description: {{ $task->description }}</p>
-                  <p class="ml-4">Schedule: {{ $task->scheduled }}</p>
-                  <p class="ml-4">Category: {{ $task->category }}</p>
-                  <p class="ml-4">Recurring: {{ $task->recurring ? 'Yes' : 'No' }}</p>
-
-                  @if($task->notes)
-                    <div class="flex items-center mb-2">
-                      <div class="mr-4 flex items-center">
-                        <p class="mr-2 ml-4">Notes:</p>
-                        <p>{{ $task->notes }}</p>
-                      </div>
-
-
-                      <div class="note-icons">
-                        <a href="{{ route('tasks.editNote', $task->id) }}">
-                          <i class="fas fa-pencil-alt"></i>
-                        </a>
-                        
-
-                        
-                        <form action="{{ route('tasks.deleteNote', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this note?');">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="delete-note-button">
-                            <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  @endif
-
-                  <button class="ml-4 mb-4 mt-4 add-note-button bg-red-500 text-white font-semibold px-4 py-2 rounded-full">
-                    +
-                  </button>
-
-                  <div class="modal hidden">
-                    <div class="modal-content">
-                      <span class="close">&times;</span>
-
-                      <form action="{{ route('tasks.addNote', ['taskId' => $task->id]) }}" method="POST" class="note-form">
-                        @csrf
-
-                        <div>
-                          <label for="note">Add Note (Max 500 characters):</label>
-                          <textarea name="note" class="border-gray-900 border rounded-md p-2 mr-2" placeholder="Enter Task Note" required maxlength="500" style="width: 100%;"></textarea>
-                        </div>
-
-                        <button type="submit" class="bg-red-500 text-white font-semibold px-4 py-2 rounded-md mt-2 mr-auto">
-                          Done
-                        </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      
-        @if(($index + 1) % 3 === 0 || $loop->last)
-                                    </div>
-                                @endif
-                            @endif
-                        @empty
-                            <p>No tasks available</p>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="col">
-    <div class="bg-red overflow-hidden shadow-xl sm:rounded-lg p-6">
-        <h3 class="container text-center text-lg font-semibold mb-4">Completed Tasks</h3>
-
-        <div class="overflow-auto">
-            <div class="row">
-                @foreach($tasks as $task)
-                    @if($task->completed)
-                        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="border rounded-lg p-4 bg-blue-100">
-                                        <div class="flex justify-between items-center">
-                                            <b><h2 class="card-subtitle mb-2 ml-4 text-body-secondary">{{ $task->title }}</h2></b>
-
-                                            <!-- Form encapsulating the Delete button -->
-                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <!-- Delete button inside the form -->
-                                                <button type="submit" class="delete-note-button bg-red-500 text-white font-semibold px-2 py-2 rounded-md">Delete</button>
-                                            </form>
-                                            <!-- End of Form -->
-                                        </div>
-                                        <!-- Task details -->
-                                        <hr>
-                                        <p class="ml-4">Description: {{ $task->description }}</p>
-                                        <p class="ml-4">Schedule: {{ $task->schedule }}</p>
-                                        <p class="ml-4">Category: {{ $task->category }}</p>
-                                        <p class="ml-4">Recurring: {{ $task->recurring ? 'Yes' : 'No' }}</p>
-                                        @if($task->notes)
-                                            <div class="flex items-center mb-2">
-                                                <div class="mr-4 flex items-center">
-                                                    <p class="mr-2 ml-4">Notes: {{ $task->notes }}</p>
+                                                  </div>
                                                 </div>
-                                            </div>
+
+
+                                                    <script>
+                                                      function toggleSpecificDay(value) {
+                                                        const specificDay = document.getElementById('specificDay');
+                                                        if (value === 'chooseday') {
+                                                          specificDay.style.display = 'block';
+                                                        } else {
+                                                          specificDay.style.display = 'none';
+                                                        }
+                                                      }
+
+                                                      // Get the modal
+                                                      const modal = document.getElementById('taskModal');
+
+                                                      // Get the button that opens the modal
+                                                      const btn = document.getElementById('createTaskBtn');
+
+                                                      // Get the <span> element that closes the modal
+                                                      const closeBtn = document.getElementsByClassName('close')[0];
+
+                                                      // When the user clicks the button, open the modal
+                                                      btn.onclick = function () {
+                                                        modal.style.display = 'block';
+                                                      };
+
+                                                      // When the user clicks on <span> (x), close the modal
+                                                      closeBtn.onclick = function () {
+                                                        modal.style.display = 'none';
+                                                      };
+
+                                                      // When the user clicks anywhere outside of the modal, close it
+                                                      window.onclick = function (event) {
+                                                        if (event.target === modal) {
+                                                          modal.style.display = 'none';
+                                                        }
+                                                      };
+                                                    </script>
+           
+
+       <div class="task">
+       <h3 class="text-center text-lg font-semibold mb-4 mt-4" style="color: white;">Task Lists</h3>
+                                @forelse($tasks as $index => $task)
+                                    @if(!$task->completed)
+                                        @if($index % 3 === 0)
                                         @endif
-                                    </div>
-                                </div>
+
+                                        <form action="{{ route('tasks.complete', ['taskId' => $task->id]) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="checkbox" name="completed" onchange="this.form.submit()" {{ $task->completed ? 'checked' : '' }}>Completed
+                                        </form>
+
+                                                                                      <div class="card">
+                                                                                          <div class="card-body">
+                                                                                                                              <div class="box">
+                                                                                                                                                                        <div class="flex justify-between items-center">
+                                                                                                                                                                            <b><h2 class="card-subtitle mb-2 ml-4 text-body-secondary" style="font-size: 24px; font-family: 'Roboto Condensed', sans-serif;">{{ $task->title }}</h2></b>
+
+                                                                                                                                                                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                                                                                                                                                                @csrf
+                                                                                                                                                                                @method('DELETE')
+                                                                                                                                                                                <button type="submit" class="delete-note-button bg-red-500 text-white font-semibold px-2 py-2 rounded-md">Delete</button>
+                                                                                                                                                                            </form>
+                                                                                                                                                                        </div>
+
+                                                                                                                                                                        <p class="ml-4" style="color: white">Description: {{ $task->description }}</p>
+                                                                                                                                                                        <p class="ml-4" style="color: white">Schedule: {{ \Carbon\Carbon::parse($task->scheduled)->isoFormat('MMMM D, YYYY HH:mm') }}</p>
+                                                                                                                                                                        <p class="ml-4" style="color: white">Category: {{ $task->category }}</p>
+                                                                                                                                                                        <p class="ml-4" style="color: white">Recurring: {{ $task->recurring ? 'Yes' : 'No' }}</p>
+
+                                                                                                                                                                  @if($task->notes)
+                                                                                                                                                                      <div class="flex items-center mb-2">
+                                                                                                                                                                          <div class="mr-4 flex items-center">
+                                                                                                                                                                              <p class="mr-2 ml-4">Notes:</p>
+                                                                                                                                                                              <p>{{ $task->notes }}</p>
+                                                                                                                                                                          </div>
+                                                                                                                                                                          
+                                                                                                                                                                          <form action="{{ route('tasks.deleteNote', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this note?');">
+                                                                                                                                                                              @csrf
+                                                                                                                                                                              @method('DELETE')
+                                                                                                                                                                              <button type="submit" class="delete-note-button">
+                                                                                                                                                                                  <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
+                                                                                                                                                                              </button>
+                                                                                                                                                                          </form>
+                                                                                                                                                                      </div>
+                                                                                                                                                                  @endif
+
+                                                                                                                                                              <button class="ml-4 mb-4 mt-4 add-note-button bg-red-500 text-white font-semibold px-4 py-2 rounded-full">
+                                                                                                                                                                  +
+                                                                                                                                                              </button>
+
+                                                                                                                                                                      <div class="modal hidden">
+                                                                                                                                                                                                            <div class="modal-content">
+                                                                                                                                                                                                                <span class="close">&times;</span>
+
+                                                                                                                                                                                                                                            <form action="{{ route('tasks.addNote', ['taskId' => $task->id]) }}" method="POST" class="note-form">
+                                                                                                                                                                                                                                                @csrf
+
+                                                                                                                                                                                                                                                                            <div>
+                                                                                                                                                                                                                                                                                <label for="note">Add Note (Max 500 characters):</label>
+                                                                                                                                                                                                                                                                                <textarea name="note" class="border-gray-900 border rounded-md p-2 mr-2" placeholder="Enter Task Note" required maxlength="500" style="width: 100%;"></textarea>
+                                                                                                                                                                                                                                                                            </div>
+
+                                                                                                                                                                                                                                                <button type="submit" class="bg-red-500 text-white font-semibold px-4 py-2 rounded-md mt-2 mr-auto">
+                                                                                                                                                                                                                                                    Done
+                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                            </form>
+                                                                                                                                                                                                            </div>
+                                                                                                                                                                      </div>
+                                                                                                                              </div>
+                                                                                          </div>
+                                                                                          </div>
+
+                                        @if(($index + 1) % 3 === 0 || $loop->last)
+                                          
+                                        @endif
+                                    @endif
+                                @empty
+                                    <p>No tasks available</p>
+                                @endforelse
                             </div>
-                        </div>
-                    @endif
-                @endforeach
+              
+            
+    
+
+                                                    </div>
+
+                                                     <!-- Right column for completed tasks sidebar -->
+    <div class="sidebar">
+    <h3 class="text-lg font-semibold mb-4">Completed Task List</h3>
+    <div class="task-list-container">
+                            @php
+                                $pastelColors = ['#FFD1DC', '#FFDAB9', '#B0E0E6', '#98FB98', '#FFA07A']; // List of pastel colors
+                            @endphp
+                            @foreach($tasks as $index => $task)
+                                @if($task->completed)
+                                    <div class="task-item-container" style="align-items: justify;">
+                                                <div class="card" style="background-color: {{ $pastelColors[$index % count($pastelColors)] }};">
+                                                                <div class="card-content" style="display: flex; justify-content: space-between; align-items: center;">
+                                                                    <h2 class="card-subtitle text-body-secondary">{{ ucfirst($task->title) }}</h2>
+                                                                                  <div class="button-group">
+                                                                                                <button onclick="showTaskDetails('{{ $task->id }}')" class="view-details-btn">View Details</button>
+                                                                                                <!-- Hidden modal for additional task details -->
+          <div id="taskModal_{{ $task->id }}" class="viewmodal" style="display: none;">
+            <div class="viewmodal-content">
+              <span class="close" onclick="hideTaskDetails('{{ $task->id }}')">&times;</span>
+              <h2 class="title card-subtitle text-body-secondary">{{ ucfirst($task->title) }}</h2>   
+           <!-- Task details -->
+
+              <div class="taskbox ml-4">
+                <p style="color: white">Description: {{ $task->description }}</p>
+                <p style="color: white "> {{ \Carbon\Carbon::parse($task->scheduled)->isoFormat('MMMM D, YYYY HH:mm') }}</p>
+
+                <p  style="color: white">Category: {{ $task->category }}</p>
+                <p  style="color: white">Recurring: {{ $task->recurring ? 'Yes' : 'No' }}</p>
+                @if($task->notes)
+                  <div class="flex items-center mb-2">
+                    <div class="mr-4 flex items-center">
+                      <p class="mr-2"  style="color: white">Notes: {{ $task->notes }}</p>
+                    </div>
+                  </div>
+                @endif
+              </div>
             </div>
-        </div>
+          </div>
+
+                                                                                                    <form action="{{ route('tasks.deleteCompleted', $task->id) }}" method="POST" class="delete-form inline" onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                                                                                        @csrf
+                                                                                                        @method('DELETE')
+                                                                                                        <button type="submit" class="delete-task-btn">
+                                                                                                            <i class="fa fa-trash"></i> <!-- Font Awesome trash icon -->
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                  </div>
+                                                                </div>
+                                                </div>
+                                    </div>
+                                @endif
+                            @endforeach
     </div>
 </div>
+
+
+<!-- End of sidebar for completed tasks -->
+                                                  
+
+                                                    <script>
+    function deleteCompletedTask(taskId) {
+        fetch(`/tasks/delete-completed/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                const taskItem = document.getElementById(`taskItem_${taskId}`);
+                if (taskItem) {
+                    taskItem.remove(); // Remove the task item from the DOM
+                }
+            } else {
+                console.error('Failed to delete task');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+
+<script>
+  // Get the button for completed tasks
+  const completedTasksBtn = document.getElementById('completedTasksBtn');
+
+  // Get the completed tasks modal
+  const completedTasksModal = document.getElementById('completedTasksModal');
+
+  // Function to toggle completed tasks modal visibility
+  function toggleCompletedTasks() {
+    if (completedTasksModal.style.display === 'none') {
+      completedTasksModal.style.display = 'block';
+    } else {
+      completedTasksModal.style.display = 'none';
+    }
+  }
+
+  // Function to close completed tasks modal
+  function closeCompletedTasksModal() {
+    completedTasksModal.style.display = 'none';
+  }
+
+  // Attach click event to the completed tasks button
+  completedTasksBtn.addEventListener('click', toggleCompletedTasks);
+</script>
+
+<script>
+    function showTaskDetails(taskId) {
+        var modal = document.getElementById('taskModal_' + taskId);
+        if (modal) {
+            modal.style.display = 'block';
+        }
+    }
+
+    function hideTaskDetails(taskId) {
+        var modal = document.getElementById('taskModal_' + taskId);
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
 
 
 
 
 <script>
-    const seeMoreButton = document.getElementById('seeMoreButton');
-    const remainingTasks = document.getElementById('remainingTasks');
+  document.addEventListener('DOMContentLoaded', function() {
+    const closeModalBtn = document.querySelector('.close-modal');
 
-    seeMoreButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        remainingTasks.classList.toggle('hidden');
-        seeMoreButton.textContent = remainingTasks.classList.contains('hidden') ? 'See More' : 'See Less';
-    });
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', function() {
+            const modal = document.getElementById('taskModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
+
 </script>
-
 
 <!-- ... Other HTML code remains unchanged ... -->
 <script>
@@ -407,9 +394,33 @@
         }
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Date picker
+    flatpickr('#date-picker', {
+        altInput: true, // Enables the use of an alternative text input field
+        altFormat: 'F j, Y', // Display month in words (e.g., January 1, 2023) in the alternative input
+        dateFormat: 'Y-m-d', // Store the date in the database in the format suitable for storage (e.g., 2023-01-01)
+        // Add more options as needed for customization
+    });
+
+    // Time picker with 12-hour format (AM/PM)
+    flatpickr('#time-picker', {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'h:i K',
+        time_24hr: false, // Set time in 12-hour format
+        // Add more options as needed for customization
+    });
+</script>
+@endsection    
+
+</body>
+
+</html>
 
 
-@endsection
 
 </x-app-layout>
+
 

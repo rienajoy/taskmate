@@ -11,12 +11,16 @@ use Carbon\Carbon;
 class TaskController extends Controller
 {
     public function index()
-{
+    {
+        if (auth()->check()) {
+            $tasks = Task::where('user_id', auth()->user()->id)->get();
+            return view('dashboard', compact('tasks'));
+        } else {
+            // Handle the case when the user is not authenticated
+            return redirect()->route('login');
+        }
+    }
     
-    $tasks = Task::where('user_id', auth()->user()->id)->get();
-
-    return view('dashboard', compact('tasks'));
-}
     
 
 
@@ -34,31 +38,28 @@ public function store(Request $request)
     $task->title = $validatedData['title'];
     $task->description = $validatedData['description'];
 
-    // Convert the scheduled date to the desired format if provided
-    if ($validatedData['scheduled']) {
-        // Create a DateTime object from the provided schedule
+    // Check if 'scheduled' key exists in validated data
+    if (isset($validatedData['scheduled'])) {
         $scheduledDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $validatedData['scheduled']);
 
-        // Ensure the format is suitable for storage in the database (Y-m-d H:i:s)
-        $formattedScheduled = $scheduledDateTime->format('Y-m-d H:i:s');
-
-        // Assign the formatted date to the task's scheduled attribute
-        $task->scheduled = $formattedScheduled;
+        if ($scheduledDateTime !== false) {
+            $formattedScheduled = $scheduledDateTime->format('Y-m-d H:i:s');
+            $task->scheduled = $formattedScheduled;
+        }
     }
 
     $task->is_recurring = $validatedData['is_recurring'] ?? false;
     $task->category = $validatedData['category'];
     $task->user_id = auth()->user()->id;
 
-    try {
-        $task->save();
-    } catch (\Exception $e) {
-        // Handle the exception (e.g., log, show error message, etc.)
-        return redirect()->route('tasks.index')->with('error', 'Error saving task: ' . $e->getMessage());
-    }
+    // Save the task to the database
+    $task->save();
 
-    return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
+    // Redirect or return a response as needed
+    // For example:
+    return redirect()->route('tasks.index')->with('success', 'Task created successfully');
 }
+
 
 
     public function destroy(Task $task)
@@ -123,19 +124,19 @@ public function store(Request $request)
     }
     
 
-    
-
-    public function deleteCompleted(Request $request, $taskId)
+    public function deleteCompleted($taskId)
     {
         $task = Task::find($taskId);
-
+    
         if ($task && $task->completed) {
             $task->delete();
-            // Optionally, return a response or redirect
+            return redirect()->back()->with('success', 'Task deleted successfully');
         }
-
-        // Handle if the task doesn't exist or is not completed
+    
+        return redirect()->back()->with('error', 'Task not found or not completed');
     }
+    
+    
 
     public function markTaskAsCompleted(Request $request, $taskId)
     {

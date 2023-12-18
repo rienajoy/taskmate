@@ -1,0 +1,621 @@
+
+    .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Adjust width as needed */
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            padding: 20px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .modal-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .bg-blue {
+            width: 50%; /* Adjust this value to fit your desired width */
+            height: fit-content; /* Adjust this if you want to set a fixed height */
+            float: left; 
+           
+        }
+
+        .bg-red {
+            width: 50%; /* Adjust this value to fit your desired width */
+            height: fit-content; /* Adjust this if you want to set a fixed height */
+            float: right; 
+            border-style: solid black;
+           
+        }
+
+        .search-form {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* To space out elements */
+        }
+
+        
+
+        .dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    display: none;
+}
+
+.dropdown-menu li {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f5f5f5;
+}
+
+        .input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-with-icon {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.input-with-icon input[type="text"] {
+    padding-right: 30px; /* Adjust as needed */
+    /* Other input styles */
+}
+
+.toggle-btn {
+    position: absolute;
+    right: 8px; /* Adjust as needed */
+    cursor: pointer;
+}
+
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.search form {
+    display: flex;
+    align-items: center;
+}
+
+.search input[type="text"] {
+    width: 300px; /* Adjust the width of the input box */
+    padding: 8px;
+    margin-right: 10px; /* Add some margin between input and button */
+    border: 1px solid #ccc; /* Example border */
+    border-radius: 5px;
+}
+
+.search button {
+    padding: 8px 16px;
+    background-color: #007bff; /* Example background color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search button:hover {
+    background-color: #0056b3; /* Example color on hover */
+}
+
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+   
+}
+
+/* Style for the button */
+.button-submit {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    font-weight: 600;
+    padding: 8px 16px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 500px; /* Adjust the width as needed */
+    margin: 50px auto 20px; /* Center the button horizontally and add top and bottom margin */
+    display: block; /* Ensure it occupies the full width available in the container */
+}
+
+
+
+.button-submit:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+}
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer; /* Change cursor to pointer on hover */
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+  }
+
+
+/* Style for the Task List section */
+.task-list-container {
+    background-color: transparent;
+
+    padding: 20px;
+    margin: 10px auto; /* Set margin: auto; to center the container horizontally */
+    margin-bottom: 20px;
+    width: 80%; /* Adjust the width as needed */
+}
+
+.bg-blue {
+   
+    color: #fff; /* Changed text color to white for better visibility */
+    padding: 20px; /* Add padding for better layout */
+    margin: 0 auto; /* Center the container horizontally */
+    width: 60%; /* Adjust the width of the container */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+.ml-md-5 {
+    margin-left: 15rem; /* Adjust this value to increase or decrease the left margin */
+}
+
+.shadow-lg {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Apply shadow effect */
+}
+
+.sm {
+    font-size: 14px; /* Adjust the font size */
+}
+
+.rounded-lg {
+    border-radius: 8px; /* Rounded corners */
+}
+
+.p-6 {
+    padding: 24px; /* Padding inside the box */
+}
+
+/* Task List heading styles */
+.task-list-container h3 {
+    font-size: 1.5rem; /* Adjust the font size */
+    font-weight: 400; /* Set font weight to bold */
+  
+    text-align: center; /* Center-align the text */
+}
+
+
+
+
+.body{
+    background-color: aqua;
+}
+
+.card {
+    /* Change this color code to the desired background color */
+    padding: 2px; /* Add padding for better spacing */
+    margin-bottom: 20px; /* Add bottom margin for separation */
+    border-radius: 10px; /* Add border-radius for rounded corners */
+   
+    
+}
+
+.box {
+    background-color: #6497b1; /* Change this color to your desired background color */
+    padding: 10px; /* Add padding to the box */
+    border-radius: 8px; /* Add border-radius for rounded corners */
+    height: 200px;
+    /* Other styles */
+}
+
+.complete-container {
+    padding: 10px; /* Reduce padding to make the container smaller */
+    margin: 10px; /* Adjust the margin as needed */
+    margin-bottom: 20px; /* Bottom margin for separation */
+    
+}
+
+/* Apply flexbox layout to the container */
+.flex-container {
+    display: flex;
+    justify-content: space-between; /* To add space between the containers */
+    gap: 20px; /* Add space between the containers */
+}
+
+/* Styles for the Task List container */
+.task-list-container {
+    flex: 1; /* Occupy available space */
+    /* Other styles */
+}
+
+/* Styles for the Completed Task List container */
+.complete-container {
+    flex: 1; /* Occupy available space */
+    /* Other styles */
+}
+
+
+/* Custom CSS */
+.completed-tasks-container {
+    max-width: 100px; /* Set the maximum width of the completed tasks container */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+.completed-task {
+    width: 50%; /* Each completed task takes the full width */
+    margin-bottom: 20px; /* Add space between completed tasks */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.completed-tasks-button {
+    display: block;
+    margin-top: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+ 
+  .task{
+   
+    padding-top: 5px;
+  }
+ 
+
+  /* CSS for the two-column layout */
+.container-fluid {
+    display: flex; /* Use flexbox for layout */
+    gap: 20px; /* Adjust the gap between columns */
+    background-color: thistle;
+}
+
+.main-content {
+    width: 900px; /* Adjust as needed */
+    float: left;
+    height: auto;
+    background-color:thistle;
+}
+
+.sidebar {
+    width: 370px; /* Set width for the sidebar */
+    background-color:rgb(130, 194, 226);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #333;
+    border-radius: 5px; 
+    border-left-style: solid;
+    border-left-width: 5px;
+    border-top: #fff;
+    border-right: #fff;
+    /* Add styles for the sidebar */
+}
+
+.completed-task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.completed-task-list li {
+    margin-bottom: 10px;
+    /* Add styles for list items */
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .main-content {
+    flex: 1; /* Let the main content take remaining space */
+    /* Other styles */
+  }
+  
+  .sidebar {
+    flex-basis: 300px; /* Set a width for the sidebar */
+    /* Other styles */
+  }
+  
+/* Your existing CSS styles */
+
+/* Define a breakpoint for smaller screens */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Change flex direction to stack columns */
+    }
+
+    .main-content,
+    .sidebar {
+        width: 100%; /* Set full width for columns on smaller screens */
+        float: none;
+    }
+
+    /* Adjust individual elements as needed for smaller screens */
+    .modal-content {
+        width: 90%; /* Adjust modal width for smaller screens */
+    }
+
+    /* Add specific styles for smaller screens */
+    .bg-blue,
+    .bg-red {
+        width: 100%; /* Set full width for these elements */
+        float: none;
+    }
+
+    /* Add additional responsive styles here */
+    /* For example, adjust padding, font sizes, or margins */
+}
+
+.text-lg {
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center-align the text */
+    margin-bottom: 20px; /* Adjust margin-bottom as needed */
+    font-family: Georgia;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    /* Other styles for the card */
+}
+
+
+.card-content {
+    
+    justify-content: space-between;
+    align-items:flex-end;
+}
+
+.card-subtitle {
+    font-size: 24px;
+    font-family: 'Roboto Condensed', sans-serif;
+    margin: 0;
+    /* Other styles for the title */
+}
+
+.view-details-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    /* Other styles for the button */
+}
+
+.task-item {
+    width: 200px; /* Adjust the width of the task item */
+    margin-bottom: 20px; /* Add margin between task items */
+    margin-left: -30px;
+    /* Other styles for task items */
+}
+
+.sidebar .card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    width: 300px; /* Set a fixed width for the card */
+    height: 80px; /* Set a fixed height for the card */
+    margin-left: -50px;
+    /* Other styles for the card */
+}
+
+
+
+.delete-icon{
+    position: fixed;
+    top: 20px; /* Adjust top position */
+    right: 20px; /* Adjust right position */
+    /* Additional styles for the delete icon */
+}
+
+.partial{
+    background-color: tomato;
+}
+.card-subtitle.text-body-secondary {
+    font-family:'Times New Roman', Times, serif;
+}
+
+.viewmodal {
+    display: none; /* Hidden by default */
+   
+   
+  }
+  
+  .viewmodal-content {
+    margin: 15% auto;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 1px solid #888;
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    background-color: tan;
+    height: 300px;
+    width: 300px; /* Set a fixed width for the modal */
+   
+}
+.close {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    cursor: pointer;
+    /* Additional styles for the close button */
+}
+.taskbox {
+    background-color:slategrey;
+    width: 200px;
+    padding: 15px;
+    height: 200px;
+    width: 260px;
+    padding: 10px;
+
+}
+.viewmodal-content .p{
+    text-align: center ;
+}
+
+  .title{
+    text-align: center;
+  }
+  .scheduled-date {
+    position: absolute;
+    top: 10px; /* Adjust top positioning */
+    right: 10px; /* Adjust right positioning */
+    color: white;
+    /* Additional styles for the scheduled date */
+}
+
+.searchcontainer{
+    background-color: azure;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+}
+
+.container{
+    width: 100%;
+}
+
+
+.modal-content {
+    background-color:darkseagreen; /* Set your desired background color */
+    /* Other styling properties for the modal content */
+    padding: 10px;
+}
+.result{
+    padding: 20px;
+}
+
+.back-to-dashboard-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.back-to-dashboard-btn:hover {
+    background-color: #2980b9;
+}
+.sched {
+    margin-top: 10px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    text-align: center; /* Align text and inputs to the center */
+}
+
+/* Style individual labels and inputs */
+.sched label,
+.sched input {
+    margin: 0 10px; /* Adjust margin between label and input */
+    border-radius: 5px;
+}
+/* Style for the close button */
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+

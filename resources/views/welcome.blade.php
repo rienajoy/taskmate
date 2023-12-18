@@ -61,7 +61,9 @@
         /* Other CSS styles as needed */
     </style>
 
-    <body class="antialiased" style="background-image: url('{{ asset('css/images/index.jpg')}}'); background-size: cover; background-position: center;">
+
+
+<body class="antialiased" style="background-image: url('{{ asset('css/images/index.jpg') }}'); background-size: cover; background-position: center;">
         <nav class="top-right-links">
         <div >
             @if (Route::has('login'))
