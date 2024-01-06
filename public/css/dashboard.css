@@ -145,7 +145,7 @@
 .center-button {
     display: flex;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 10px;
    
 }
 
@@ -264,14 +264,13 @@
     margin-bottom: 20px; /* Add bottom margin for separation */
     border-radius: 10px; /* Add border-radius for rounded corners */
    
-    
 }
 
 .box {
     background-color: #6497b1; /* Change this color to your desired background color */
     padding: 10px; /* Add padding to the box */
     border-radius: 8px; /* Add border-radius for rounded corners */
-    height: 200px;
+    height: 250px;
     /* Other styles */
 }
 
@@ -292,17 +291,14 @@
 /* Styles for the Task List container */
 .task-list-container {
     flex: 1; /* Occupy available space */
-    /* Other styles */
 }
 
 /* Styles for the Completed Task List container */
 .complete-container {
     flex: 1; /* Occupy available space */
-    /* Other styles */
 }
 
 
-/* Custom CSS */
 .completed-tasks-container {
     max-width: 100px; /* Set the maximum width of the completed tasks container */
     margin: 0 auto; /* Center the container horizontally */
@@ -312,17 +308,6 @@
     width: 50%; /* Each completed task takes the full width */
     margin-bottom: 20px; /* Add space between completed tasks */
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -344,7 +329,6 @@
   }
  
 
-  /* CSS for the two-column layout */
 .container-fluid {
     display: flex; /* Use flexbox for layout */
     gap: 20px; /* Adjust the gap between columns */
@@ -369,7 +353,6 @@
     border-left-width: 5px;
     border-top: #fff;
     border-right: #fff;
-    /* Add styles for the sidebar */
 }
 
 .completed-task-list {
@@ -379,7 +362,6 @@
 
 .completed-task-list li {
     margin-bottom: 10px;
-    /* Add styles for list items */
 }
 
 .container {
@@ -389,17 +371,13 @@
   
   .main-content {
     flex: 1; /* Let the main content take remaining space */
-    /* Other styles */
   }
   
   .sidebar {
     flex-basis: 300px; /* Set a width for the sidebar */
-    /* Other styles */
   }
   
-/* Your existing CSS styles */
 
-/* Define a breakpoint for smaller screens */
 @media screen and (max-width: 768px) {
     .container {
         flex-direction: column; /* Change flex direction to stack columns */
@@ -411,20 +389,17 @@
         float: none;
     }
 
-    /* Adjust individual elements as needed for smaller screens */
     .modal-content {
         width: 90%; /* Adjust modal width for smaller screens */
     }
 
-    /* Add specific styles for smaller screens */
     .bg-blue,
     .bg-red {
         width: 100%; /* Set full width for these elements */
         float: none;
     }
 
-    /* Add additional responsive styles here */
-    /* For example, adjust padding, font sizes, or margins */
+   
 }
 
 .text-lg {
@@ -439,7 +414,6 @@
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 15px;
-    /* Other styles for the card */
 }
 
 
@@ -453,7 +427,6 @@
     font-size: 24px;
     font-family: 'Roboto Condensed', sans-serif;
     margin: 0;
-    /* Other styles for the title */
 }
 
 .view-details-btn {
@@ -464,14 +437,12 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    /* Other styles for the button */
 }
 
 .task-item {
     width: 200px; /* Adjust the width of the task item */
     margin-bottom: 20px; /* Add margin between task items */
     margin-left: -30px;
-    /* Other styles for task items */
 }
 
 .sidebar .card {
@@ -481,7 +452,6 @@
     width: 300px; /* Set a fixed width for the card */
     height: 80px; /* Set a fixed height for the card */
     margin-left: -50px;
-    /* Other styles for the card */
 }
 
 
@@ -490,7 +460,6 @@
     position: fixed;
     top: 20px; /* Adjust top position */
     right: 20px; /* Adjust right position */
-    /* Additional styles for the delete icon */
 }
 
 .partial{
@@ -526,7 +495,6 @@
     top: 2px;
     right: 5px;
     cursor: pointer;
-    /* Additional styles for the close button */
 }
 .taskbox {
     background-color:slategrey;
@@ -549,7 +517,6 @@
     top: 10px; /* Adjust top positioning */
     right: 10px; /* Adjust right positioning */
     color: white;
-    /* Additional styles for the scheduled date */
 }
 
 .searchcontainer{
@@ -565,8 +532,7 @@
 
 
 .modal-content {
-    background-color:darkseagreen; /* Set your desired background color */
-    /* Other styling properties for the modal content */
+    background-color:snow; /* Set your desired background color */
     padding: 10px;
 }
 .result{
@@ -592,19 +558,17 @@
     padding: 15px;
 
     display: flex;
-    flex-direction: row; /* Align items horizontally */
-    align-items: center; /* Center horizontally */
-    justify-content: center; /* Center vertically */
-    text-align: center; /* Align text and inputs to the center */
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
 }
 
-/* Style individual labels and inputs */
 .sched label,
 .sched input {
-    margin: 0 10px; /* Adjust margin between label and input */
+    margin: 0 10px; 
     border-radius: 5px;
 }
-/* Style for the close button */
 .close-modal {
     color: #aaa;
     float: right;
@@ -617,5 +581,19 @@
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+/* CSS for checkbox and label positioning */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0px; /* Adjust the spacing between checkbox and other content */
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-right: 10px; /* Adjust the spacing between checkbox and label text */
+}
+
+.taskform{
+    padding: 20px;
 }
 

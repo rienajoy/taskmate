@@ -7,6 +7,8 @@ use App\Models\Task;
 use App\Notifications\TaskApproachingNotification;
 use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+
 
 class TaskController extends Controller
 {
@@ -16,52 +18,53 @@ class TaskController extends Controller
             $tasks = Task::where('user_id', auth()->user()->id)->get();
             return view('dashboard', compact('tasks'));
         } else {
-            // Handle the case when the user is not authenticated
             return redirect()->route('login');
         }
     }
     
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|max:100',
+            'description' => 'required|max:1000',
+            'scheduled' => 'nullable|date_format:Y-m-d\TH:i', // Adjust format based on your form
+            'is_recurring' => 'boolean',
+            'category' => 'in:Personal,Work',
+        ]);
+    
+        $task = new Task();
+        $task->title = $validatedData['title'];
+        $task->description = $validatedData['description'];
+    
+        // Check if 'scheduled' key exists and is not empty before processing
+        if (array_key_exists('scheduled', $validatedData) && !empty($validatedData['scheduled'])) {
+            // Convert the scheduled date to the desired format if provided
+            $scheduledDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $validatedData['scheduled']);
+            if ($scheduledDateTime !== false) {
+                // Ensure the format is suitable for storage in the database (Y-m-d H:i:s)
+                $formattedScheduled = $scheduledDateTime->format('Y-m-d H:i:s');
+                // Assign the formatted date to the task's scheduled attribute
+                $task->scheduled = $formattedScheduled;
+            }
+        }
+    
+        $task->is_recurring = $validatedData['is_recurring'] ?? false;
+        $task->category = $validatedData['category'];
+        $task->user_id = auth()->user()->id;
+    
+        try {
+            $task->save();
+        } catch (\Exception $e) {
+            // Handle the exception (e.g., log, show error message, etc.)
+            return redirect()->route('tasks.index')->with('error', 'Error saving task: ' . $e->getMessage());
+        }
+    
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
+    }
     
 
 
-public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'title' => 'required|max:100',
-        'description' => 'required|max:1000',
-        'scheduled' => 'nullable|date_format:Y-m-d\TH:i', // Adjust format based on your form
-        'is_recurring' => 'boolean',
-        'category' => 'in:Personal,Work',
-    ]);
-
-    $task = new Task();
-    $task->title = $validatedData['title'];
-    $task->description = $validatedData['description'];
-
-    // Check if 'scheduled' key exists in validated data
-    if (isset($validatedData['scheduled'])) {
-        $scheduledDateTime = \DateTime::createFromFormat('Y-m-d\TH:i', $validatedData['scheduled']);
-
-        if ($scheduledDateTime !== false) {
-            $formattedScheduled = $scheduledDateTime->format('Y-m-d H:i:s');
-            $task->scheduled = $formattedScheduled;
-        }
-    }
-
-    $task->is_recurring = $validatedData['is_recurring'] ?? false;
-    $task->category = $validatedData['category'];
-    $task->user_id = auth()->user()->id;
-
-    // Save the task to the database
-    $task->save();
-
-    // Redirect or return a response as needed
-    // For example:
-    return redirect()->route('tasks.index')->with('success', 'Task created successfully');
-}
-
-
-
+    
     public function destroy(Task $task)
     {
         $task->delete();
@@ -93,10 +96,8 @@ public function store(Request $request)
     
     public function edit($taskId)
     {
-        // Fetch the task based on the provided ID
         $task = Task::findOrFail($taskId);
 
-        // Pass the task data to the view for editing the note
         return view('tasks.editNote', compact('task'));
     }
 
@@ -140,18 +141,13 @@ public function store(Request $request)
 
     public function markTaskAsCompleted(Request $request, $taskId)
     {
-        // Find the task by ID
         $task = Task::find($taskId);
 
         if ($task) {
-            // Update task completion status
             $task->completed = true;
             $task->save();
-            
-            // Redirect or return the updated task list view
-            return redirect()->route('tasks.index')->with('success', 'Task marked as completed.');
+                        return redirect()->route('tasks.index')->with('success', 'Task marked as completed.');
         } else {
-            // Task not found, handle the error (e.g., redirect with error message)
             return redirect()->route('tasks.index')->with('error', 'Task not found.');
         }
     }
@@ -163,7 +159,7 @@ public function store(Request $request)
     {
         $query = $request->input('query');
     
-        $tasks = Task::where('user_id', auth()->user()->id) // Assuming the user_id column relates to the user's ID in the tasks table
+        $tasks = Task::where('user_id', auth()->user()->id) 
             ->where(function ($queryBuilder) use ($query) {
                 $queryBuilder->where('title', 'like', "%$query%")
                     ->orWhere('category', 'like', "%$query%")
@@ -177,17 +173,14 @@ public function store(Request $request)
 
     public function createTask(Request $request)
     {
-        // Logic to create the task
         $taskDetails = $request->input('task_details');
         $userEmail = $request->input('user_email');
 
-        // Schedule the notification to be sent 5 minutes before the task time
         $scheduledTime = now()->addMinutes(5);
 
         Notification::route('mail', $userEmail)
             ->notify((new TaskApproachingNotification($taskDetails))->delay($scheduledTime));
 
-        // Rest of your code to create the task...
     }
 }
 

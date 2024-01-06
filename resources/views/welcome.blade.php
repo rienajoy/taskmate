@@ -6,6 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TaskMate</title>
+
+
+    <link rel="icon" type="image/png" href="{{ asset('css/images/task.png') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -52,13 +56,9 @@
         }
 
         #feedbackButton:active {
-    transform: scale(0.60); /* Scale down when button is pressed */
+    transform: scale(0.60); 
 }
 
-        
-
-
-        /* Other CSS styles as needed */
     </style>
 
 
@@ -83,22 +83,9 @@
         </div>
             </nav>
 
-       <!-- <section class="hero-section" id="hero">
-            <div class="wave">
-
-            <svg width="100%" height="355px" viewBox="0 0 1920 355" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-             <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g id="Apple-TV" transform="translate(0.000000, -402.000000)" fill="#FFFFFF">
-            <path d="M0,439.134243 C175.04074,464.89273 327.944386,477.771974 458.710937,477.771974 C654.860765,477.771974 870.645295,442.632362 1205.9828,410.192501 C1429.54114,388.565926 1667.54687,411.092417 1920,477.771974 L1920,757 L1017.15166,757 L0,757 L0,439.134243 Z" id="Path"></path>
-             </g>
-            </g>
-            </svg>
-
-            </div>
-            -->
+  
         <div class="container">
             <div class="row align-items-center">
-                <!-- Content on the left side -->
                 <div class= "welcome">
                     <div style="text-align: center;">
                     <h1 data-aos="fade-right" class="mx-auto">TASKMATE</h1>
@@ -106,7 +93,7 @@
                 </div>
             </div>
         </div>
-        </section><!-- End Hero -->
+        </section>
 
         <main id="main">
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

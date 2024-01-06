@@ -32,15 +32,22 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
+
+
 
 Route::resource('tasks', TaskController::class);
-// In your routes/web.php or routes/web.php
-
-
-//Route::get('/tasks/search', [TaskController::class, 'search'])->name('tasks.search');
 Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
-
 Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+
+
+Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+Route::get('/feedback', function () {return view('feedback');})->name('feedback.form');
+Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedback.store');
+
+
 
 
 
@@ -56,14 +63,8 @@ Route::delete('/tasks/{task}/deleteNote', [TaskController::class, 'deleteNote'])
 
 
 
-Route::post('/register', [UserController::class, 'register'])->name('register');
 
 
-
-
-
-
-// Define a route to display the feedback modal
 Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
 
 
@@ -73,9 +74,6 @@ Route::get('/feedback', function () {return view('feedback');})->name('feedback.
 Route::post('/feedback/store', [FeedbackController::class, 'store'])->name('feedback.store');
 
 
-Route::get('/welcome', function () {
-    return view('welcome');
-})->name('welcome');
 
 
 

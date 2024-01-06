@@ -5,7 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'TaskMate') }}</title>
+
+        <link rel="icon" type="image/png" href="{{ asset('css/images/task.png') }}">
+
+
+        
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,7 +23,9 @@
         @livewireStyles
     </head>
     <body>
+
         <div class="font-sans text-gray-900 antialiased">
+            <!-- Add a button to toggle dark/light mode -->
             {{ $slot }}
         </div>
 

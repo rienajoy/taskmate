@@ -4,21 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Feedback Page</title>
-    <!-- Include necessary CSS files -->
-    <!-- Bootstrap CSS -->
+  
     <link href="path/to/bootstrap.min.css" rel="stylesheet">
-    <!-- Your custom CSS if needed -->
 
-    <!-- Include necessary JS files -->
-    <!-- Bootstrap JS Bundle (Bootstrap and Popper.js) -->
     <script src="path/to/bootstrap.bundle.min.js"></script>
-    <!-- Your custom scripts if needed -->
 </head>
 <style>
-   /* Centering the modal */
    body, html {
             height: 100%;
-            overflow: hidden; /* Prevent scrolling */
+            overflow: hidden; 
         
         }
 
@@ -37,17 +31,16 @@
             align-items: center;
             height: 100%;
         }
-        /* Custom styling for the modal */
         .modal-content {
             border: none;
             box-shadow: 10px 10px 20px rgba(0, 0.1, 0.1, 0.2);
-            background-color: #f5f8fc; /* Light blue shade */
+            background-color: #f5f8fc; 
             border-radius: 10px;
             height: 500px;
             width: 600px;
         }
         .modal-header {
-            background-color: #3498db; /* Blue header */
+            background-color: #3498db; 
             color: #fff;
             border-radius: 10px 10px 0 0;
         }
@@ -72,7 +65,7 @@
         border: 3px solid #787777;
         border-radius: 5px;
         resize: vertical;
-        background-color: #d6e6f8; /* Change this color to your desired background color */
+        background-color: #d6e6f8; 
         }
 
     .submit_button{
@@ -82,16 +75,15 @@
         font-size: 20px;
         margin-top: 15px;
         margin-left: 390px;
-        transition: transform 0.3s, background-color 0.3s; /* Transition effect for shadow and background */
+        transition: transform 0.3s, background-color 0.3s; 
 
         font-family:Georgia, 'Times New Roman', Times, serif;
     }
 
      #feedbackButton:active {
-    transform: scale(0.95); /* Scale down when button is pressed */
+    transform: scale(0.95); 
 }
 
-/* Custom CSS to position the close button */
 .modal-header {
     position: relative;
 }
@@ -103,24 +95,23 @@
 }
 
 .close-circle {
-    border-radius: 50%; /* Makes the button circular */
-    width: 30px; /* Adjust the width */
-    height: 30px; /* Adjust the height */
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px;
     margin:10px;
 }
 
 .close-circle {
-    border-radius: 50%; /* Makes the button circular */
-    width: 30px; /* Adjust the width */
-    height: 30px; /* Adjust the height */
-    padding: 0; /* Remove padding */
-    font-size: 24px; /* Adjust the font size of 'x' */
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px; 
+    padding: 0;
+    font-size: 24px; 
 }
 
-/* Optional: Custom styling for the close button */
 .close-circle span:hover {
-    color: red; /* Change color on hover */
-    cursor: pointer; /* Show pointer cursor on hover */
+    color: red; 
+    cursor: pointer; 
 }
 
 
@@ -164,8 +155,6 @@
 
 
 <script src="path/to/bootstrap.bundle.min.js"></script>
-<!-- Your custom scripts if needed -->
-<!-- Your HTML code remains the same -->
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -174,13 +163,11 @@
         submitButton.addEventListener('click', function() {
             const feedbackText = document.getElementById('feedback').value;
 
-            // Check if the feedback textarea is empty
             if (feedbackText.trim() === '') {
                 alert('Please provide feedback before submitting.');
-                return; // Stop further execution
+                return; 
             }
 
-            // Send AJAX request to save the feedback
             fetch('{{ route("feedback.store") }}', {
                 method: 'POST',
                 headers: {
@@ -193,9 +180,7 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Display success message
                     alert('Feedback submitted successfully!');
-                    // Redirect to the welcome dashboard
                     window.location.href = '{{ route("welcome") }}';
                 } else {
                     throw new Error('Failed to submit feedback');
@@ -203,11 +188,9 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                // Handle error if needed
             });
         });
 
-        // Close button functionality remains the same
         const closeButton = document.querySelector('.modal-header .close');
         closeButton.addEventListener('click', function() {
             window.location.href = '{{ route("welcome") }}';

@@ -35,14 +35,14 @@
                         <h2 class="text-xl font-semibold text-blue-600 text-center">{{ $task->title }}</h2>
 
 
-                            <!-- Form for deleting the task -->
                             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" class="delete-form">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="delete-task-btn">
-                                <i class="fa fa-trash"></i> <!-- Font Awesome trash icon -->
-                                </button>                            </form>
-                            <!-- End of deletion form -->
+                                <i class="fa fa-trash"></i> 
+                                </button>                            
+                            </form>
+                           
                         </div>
 
                         <div class="mb-4">
@@ -51,7 +51,6 @@
                             <p><strong>Category:</strong> {{ $task->category }}</p>
                             <p><strong>Recurring:</strong> {{ $task->recurring ? 'Yes' : 'No' }}</p>
 
-                            <!-- Display notes if available -->
                             @if($task->notes)
                                 <div class="flex items-center mb-2">
                                     <div class="mr-4 flex items-center">
@@ -59,7 +58,6 @@
                                         <p>{{ $task->notes }}</p>
                                     </div>
 
-                                    <!-- Icons for editing and deleting notes -->
                                     <div class="note-icons">
                                         <a href="{{ route('tasks.editNote', $task->id) }}" class="text-blue-500"><i class="fas fa-pencil-alt"></i></a>
 
@@ -72,10 +70,8 @@
                                 </div>
                             @endif
 
-                            <!-- Button to add a note -->
                             <button class="bg-red-500 text-white font-semibold px-4 py-2 rounded-full mb-4">+</button>
 
-                            <!-- Modal for adding a note -->
                             <div class="modal hidden">
                                 <div class="modal-content">
                                     <span class="close">&times;</span>
@@ -92,19 +88,18 @@
                                     </form>
                                 </div>
                             </div>
-                            <!-- End of note addition modal -->
                         </div>
                     </div>
                 </div>
 
                 @if(($index + 1) % 3 === 0 || $loop->last)
-                    </div><!-- Closing the row if the condition is met -->
+                    </div>
                 @endif
             @empty
                 <p class="w-full text-center">No tasks available</p>
             @endforelse
-        </div><!-- Closing the main row div -->
-    </div><!-- Closing the container div -->
+        </div>
+    </div>
 </div>
     
 
